@@ -162,7 +162,7 @@ class ViTMAE(nn.Module):
         else:
             raise TypeError('pretrained must be a str or None')
 
-    def forward_features(self, x):
+    def forward_features(self, img):
         x = self.to_patch_embedding(img)
         b, n, _ = x.shape
 
@@ -185,6 +185,6 @@ class ViTMAE(nn.Module):
         return tuple(features)
 
     def forward(self, img):
-        x = self.forward_features(x)
+        x = self.forward_features(img)
 
         return x
