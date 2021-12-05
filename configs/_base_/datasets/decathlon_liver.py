@@ -1,6 +1,6 @@
 # dataset settings
 dataset_type = 'DecathlonLiverDataset'
-data_root = '/media/roman/SSD_4TB/david/Decathlon/2D/Task03_Liver'
+data_root = '/cephyr/NOBACKUP/groups/ml-e2/olzond/data/Decathlon/2D/Task03_Liver'
 img_norm_cfg = dict(
     mean=[127.5], std=[63.75], to_rgb=False)
 crop_size = (224, 224)
