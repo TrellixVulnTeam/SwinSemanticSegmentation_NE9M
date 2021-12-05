@@ -93,7 +93,9 @@ class ViTMAE(nn.Module):
 
         assert image_height % patch_height == 0 and image_width % patch_width == 0, 'Image dimensions must be divisible by the patch size.'
 
-        num_patches = (image_height // patch_height) * (image_width // patch_width)
+        self.Hp = (image_height // patch_height)
+        self.Wp = (image_width // patch_width)
+        num_patches = self.Hp * self.Wp
         patch_dim = channels * patch_height * patch_width
         assert pool in {'cls', 'mean'}, 'pool type must be either cls (cls token) or mean (mean pooling)'
 
@@ -161,19 +163,6 @@ class ViTMAE(nn.Module):
             raise TypeError('pretrained must be a str or None')
 
     def forward_features(self, x):
-        features = []
-        for i, (attn, ff) in enumerate(self.transformer.layers):
-            x = attn(x) + x
-            x = ff(x) + x
-            if i in self.out_indices:
-                xp = x[:, 1:, :].permute(0, 2, 1).reshape(B, -1, Hp, Wp)
-                features.append(xp.contiguous())
-        ops = [self.fpn1, self.fpn2, self.fpn3, self.fpn4]
-        for i in range(len(features)):
-            features[i] = ops[i](features[i])
-        return tuple(features)
-
-    def forward(self, img):
         x = self.to_patch_embedding(img)
         b, n, _ = x.shape
 
@@ -182,6 +171,20 @@ class ViTMAE(nn.Module):
         x += self.pos_embedding[:, :(n + 1)]
         x = self.dropout(x)
 
+        features = []
+        for i, (attn, ff) in enumerate(self.transformer.layers):
+            x = attn(x) + x
+            x = ff(x) + x
+            if i in self.out_indices:
+                xp = x[:, 1:, :].permute(0, 2, 1).reshape(b, -1, self.Hp, self.Wp)
+                features.append(xp.contiguous())
+        ops = [self.fpn1, self.fpn2, self.fpn3, self.fpn4]
+        for i in range(len(features)):
+            features[i] = ops[i](features[i])
+
+        return tuple(features)
+
+    def forward(self, img):
         x = self.forward_features(x)
 
         return x
