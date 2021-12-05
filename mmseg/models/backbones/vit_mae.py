@@ -112,14 +112,6 @@ class ViTMAE(nn.Module):
 
         self.out_indices = out_indices
 
-        self.pool = pool
-        self.to_latent = nn.Identity()
-
-        self.mlp_head = nn.Sequential(
-            nn.LayerNorm(dim),
-            nn.Linear(dim, num_classes)
-        )
-
         if patch_size == 16:
             self.fpn1 = nn.Sequential(
                 nn.ConvTranspose2d(dim, dim, kernel_size=2, stride=2),
