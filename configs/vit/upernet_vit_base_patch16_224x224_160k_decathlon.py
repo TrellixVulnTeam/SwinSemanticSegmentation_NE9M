@@ -14,11 +14,12 @@ model = dict(
         mlp_dim=2048
     ),
     decode_head=dict(
-        in_channels=[1024],
-        num_classes=2
+        in_channels=[1024, 1024, 1024, 1024],
+        num_classes=2,
+        channels=1024
     ),
     auxiliary_head=dict(
-        in_channels=512,
+        in_channels=768,
         num_classes=2
     ))
 

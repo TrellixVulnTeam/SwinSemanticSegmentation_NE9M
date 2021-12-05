@@ -75,6 +75,7 @@ class Transformer(nn.Module):
                 PreNorm(dim, Attention(dim, heads = heads, dim_head = dim_head, dropout = dropout)),
                 PreNorm(dim, FeedForward(dim, mlp_dim, dropout = dropout))
             ]))
+
     def forward(self, x):
         for attn, ff in self.layers:
             x = attn(x) + x
@@ -84,7 +85,7 @@ class Transformer(nn.Module):
 
 @BACKBONES.register_module()
 class ViTMAE(nn.Module):
-    def __init__(self, *, image_size, patch_size, num_classes, dim, depth, heads, mlp_dim, pool = 'cls', channels = 3, dim_head = 64, dropout = 0., emb_dropout = 0.):
+    def __init__(self, *, image_size, patch_size, num_classes, dim, depth, heads, mlp_dim, pool = 'cls', channels = 3, dim_head = 64, dropout = 0., emb_dropout = 0., out_indices=[3, 5, 7, 11]):
         super().__init__()
         image_height, image_width = pair(image_size)
         patch_height, patch_width = pair(patch_size)
@@ -106,6 +107,8 @@ class ViTMAE(nn.Module):
 
         self.transformer = Transformer(dim, depth, heads, dim_head, mlp_dim, dropout)
 
+        self.out_indices = out_indices
+
         self.pool = pool
         self.to_latent = nn.Identity()
 
@@ -113,6 +116,22 @@ class ViTMAE(nn.Module):
             nn.LayerNorm(dim),
             nn.Linear(dim, num_classes)
         )
+
+        if patch_size == 16:
+            self.fpn1 = nn.Sequential(
+                nn.ConvTranspose2d(dim, dim, kernel_size=2, stride=2),
+                nn.SyncBatchNorm(dim),
+                nn.GELU(),
+                nn.ConvTranspose2d(dim, dim, kernel_size=2, stride=2),
+            )
+
+            self.fpn2 = nn.Sequential(
+                nn.ConvTranspose2d(dim, dim, kernel_size=2, stride=2),
+            )
+
+            self.fpn3 = nn.Identity()
+
+            self.fpn4 = nn.MaxPool2d(kernel_size=2, stride=2)
 
     def init_weights(self, pretrained=None):
         """Initialize the weights in backbone.
@@ -140,6 +159,19 @@ class ViTMAE(nn.Module):
         else:
             raise TypeError('pretrained must be a str or None')
 
+    def forward_features(self, x):
+        features = []
+        for i, (attn, ff) in enumerate(self.transformer.layers):
+            x = attn(x) + x
+            x = ff(x) + x
+            if i in self.out_indices:
+                xp = x[:, 1:, :].permute(0, 2, 1).reshape(B, -1, Hp, Wp)
+                features.append(xp.contiguous())
+        ops = [self.fpn1, self.fpn2, self.fpn3, self.fpn4]
+        for i in range(len(features)):
+            features[i] = ops[i](features[i])
+        return tuple(features)
+
     def forward(self, img):
         x = self.to_patch_embedding(img)
         b, n, _ = x.shape
@@ -149,8 +181,6 @@ class ViTMAE(nn.Module):
         x += self.pos_embedding[:, :(n + 1)]
         x = self.dropout(x)
 
-        x = self.transformer(x)
-
-        x = x.mean(dim = 1) if self.pool == 'mean' else x[:, 0]
+        x = self.forward_features(x)
 
         return x
