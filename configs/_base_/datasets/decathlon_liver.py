@@ -7,7 +7,7 @@ crop_size = (224, 224)
 train_pipeline = [
     dict(type='LoadImageFromFile', color_type='grayscale'),
     dict(type='LoadAnnotations', reduce_zero_label=True),
-    dict(type='Resize', img_scale=(2048, 512), ratio_range=(0.5, 2.0)),
+    dict(type='Resize', img_scale=(1024, 512), ratio_range=(0.5, 2.0)),
     dict(type='RandomCrop', crop_size=crop_size, cat_max_ratio=0.75),
     dict(type='RandomFlip', prob=0.),
     #dict(type='PhotoMetricDistortion'),
@@ -20,7 +20,7 @@ test_pipeline = [
     dict(type='LoadImageFromFile', color_type='grayscale'),
     dict(
         type='MultiScaleFlipAug',
-        img_scale=(2048, 512),
+        img_scale=(224, 224),
         # img_ratios=[0.5, 0.75, 1.0, 1.25, 1.5, 1.75],
         flip=False,
         transforms=[
