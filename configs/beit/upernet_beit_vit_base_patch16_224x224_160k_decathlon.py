@@ -52,7 +52,6 @@ model = dict(
 #                                                  'norm': dict(decay_mult=0.)}))
 
 optimizer = dict(_delete_=True, type='AdamW', lr=7e-4, betas=(0.9, 0.999), weight_decay=0.05,
-                 constructor='LayerDecayOptimizerConstructor',
                  paramwise_cfg=dict(num_layers=12, layer_decay_rate=0.65))
 
 lr_config = dict(_delete_=True, policy='poly',
