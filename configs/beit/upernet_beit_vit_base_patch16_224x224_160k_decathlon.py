@@ -29,6 +29,7 @@ model = dict(
         qkv_bias=True,
         use_abs_pos_emb=False,
         use_rel_pos_bias=True,
+        use_shared_rel_pos_bias=True,
         init_values=0.1,
         drop_path_rate=0.1,
         out_indices=[3, 5, 7, 11]
