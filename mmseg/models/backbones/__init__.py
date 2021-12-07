@@ -9,8 +9,9 @@ from .resnext import ResNeXt
 from .unet import UNet
 from .swin_transformer import SwinTransformer
 from .vit_mae import ViTMAE
+from .beit import BEiT
 
 __all__ = [
     'ResNet', 'ResNetV1c', 'ResNetV1d', 'ResNeXt', 'HRNet', 'FastSCNN',
-    'ResNeSt', 'MobileNetV2', 'UNet', 'CGNet', 'MobileNetV3', 'SwinTransformer', 'ViTMAE'
+    'ResNeSt', 'MobileNetV2', 'UNet', 'CGNet', 'MobileNetV3', 'SwinTransformer', 'ViTMAE', 'BEiT'
 ]
