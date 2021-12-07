@@ -12,8 +12,8 @@
 # --------------------------------------------------------'
 # recommand use this config for BEiT models which are self-supervised pretrained on imagenet
 _base_ = [
-    '../../_base_/models/upernet_beit.py', '../../_base_/datasets/decathlon_liver_beit.py',
-    '../../_base_/default_runtime.py', '../../_base_/schedules/schedule_160k.py'
+    '../_base_/models/upernet_beit.py', '../_base_/datasets/decathlon_liver_beit.py',
+    '../_base_/default_runtime.py', '../_base_/schedules/schedule_160k.py'
 ]
 crop_size = (224, 224)
 
