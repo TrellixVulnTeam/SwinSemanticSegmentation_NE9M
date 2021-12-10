@@ -206,7 +206,6 @@ class EsViT(nn.Module):
 
         trunc_normal_(self.pos_embed, std=.02)
         trunc_normal_(self.cls_token, std=.02)
-        self.apply(self._init_weights)
 
     def init_weights(self, pretrained=None):
         """Initialize the weights in backbone.
