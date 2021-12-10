@@ -23,8 +23,12 @@ from functools import partial
 
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 
-from utils import trunc_normal_
+from timm.models.layers import trunc_normal_
+from mmcv_custom import load_checkpoint
+from mmseg.utils import get_root_logger
+from mmseg.models.builder import BACKBONES
 
 
 def drop_path(x, drop_prob: float = 0., training: bool = False):
@@ -144,7 +148,8 @@ class PatchEmbed(nn.Module):
         return x, (Hp, Wp)
 
 
-class VisionTransformer(nn.Module):
+@BACKBONES.register_module()
+class EsViT(nn.Module):
     """ Vision Transformer """
 
     def __init__(self, img_size=[224], patch_size=16, in_chans=3, num_classes=0, embed_dim=768, depth=12,
