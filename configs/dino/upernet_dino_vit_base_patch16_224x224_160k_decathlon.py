@@ -29,6 +29,7 @@ model = dict(
         num_heads=12,
         mlp_ratio=4,
         qkv_bias=True,
+        in_chans=1,
         init_values=0.1,
         drop_path_rate=0.1,
         out_indices=[3, 5, 7, 11]
