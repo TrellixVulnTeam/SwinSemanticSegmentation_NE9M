@@ -6,12 +6,14 @@ import time
 
 import mmcv
 import torch
+import torch.distributed as dist
 from mmcv.runner import init_dist
 from mmcv.utils import Config, DictAction, get_git_hash
 
 from mmseg import __version__
 from mmseg.apis import set_random_seed, train_segmentor
 from mmseg.datasets import build_dataset
+from mmseg.datasets.preprocessing import preprocessing_datasets
 from mmseg.models import build_segmentor
 from mmseg.utils import collect_env, get_root_logger
 
@@ -41,6 +43,7 @@ def parse_args():
         help='ids of gpus to use '
         '(only applicable to non-distributed training)')
     parser.add_argument('--seed', type=int, default=None, help='random seed')
+    parser.add_argument('--tmp_dir', type=str, default='/scratch/local', help='TMP dir to save preprocessed data to')
     parser.add_argument(
         '--deterministic',
         action='store_true',
@@ -133,7 +136,9 @@ def main():
         test_cfg=cfg.get('test_cfg'))
 
     logger.info(model)
-
+    preprocessing_datasets.prepare_datasets(cfg, logger)
+    if distributed:
+        dist.barrier()
     datasets = [build_dataset(cfg.data.train)]
     if len(cfg.workflow) == 2:
         val_dataset = copy.deepcopy(cfg.data.val)
