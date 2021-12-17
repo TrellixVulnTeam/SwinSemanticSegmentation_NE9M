@@ -2,7 +2,7 @@ import nibabel as nib
 import numpy as np
 from PIL import Image
 import os
-from utils import multiprocess_data, split_val_from_train, clip_ct_window
+from .utils import multiprocess_data, split_val_from_train, clip_ct_window
 
 
 def preprocess_decathlon(cfg, new_dataset_root, logger):

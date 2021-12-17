@@ -1,7 +1,7 @@
 import os
 from mmcv.runner import master_only
 
-from decathlon import preprocess_decathlon
+from .decathlon import preprocess_decathlon
 
 
 @master_only
