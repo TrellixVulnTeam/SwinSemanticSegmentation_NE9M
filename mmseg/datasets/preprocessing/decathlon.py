@@ -6,8 +6,12 @@ from .utils import multiprocess_data_and_labels, split_val_from_train, clip_ct_w
 
 
 def preprocess_decathlon(cfg, new_dataset_root, logger):
-    vol_root = os.path.join(cfg.data_root, 'imagesTr')
-    label_root = os.path.join(cfg.data_root, 'labelsTr')
+    if not 'WORK_ROOT' in os.environ:
+        work_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+    else:
+        work_dir = os.getenv('WORK_ROOT')
+    vol_root = os.path.join(work_dir, cfg.data_root, 'imagesTr')
+    label_root = os.path.join(work_dir, cfg.data_root, 'labelsTr')
 
     volumes = os.listdir(vol_root)
     volumes = [os.path.join(vol_root, f) for f in volumes]
