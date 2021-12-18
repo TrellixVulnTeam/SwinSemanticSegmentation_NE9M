@@ -15,7 +15,7 @@ from mmseg.apis import set_random_seed, train_segmentor
 from mmseg.datasets import build_dataset
 from mmseg.datasets.preprocessing import preprocessing_datasets
 from mmseg.models import build_segmentor
-from mmseg.utils import collect_env, get_root_logger
+from mmseg.utils import collect_env, get_root_logger, is_master
 
 
 def parse_args():
@@ -136,8 +136,10 @@ def main():
         test_cfg=cfg.get('test_cfg'))
 
     logger.info(model)
-    cfg = preprocessing_datasets.prepare_datasets(cfg, logger)
-    if distributed:
+    if is_master():
+        preprocessing_datasets.prepare_datasets(cfg, logger)
+        dist.barrier()
+    else:
         dist.barrier()
     datasets = [build_dataset(cfg.data.train)]
     if len(cfg.workflow) == 2:

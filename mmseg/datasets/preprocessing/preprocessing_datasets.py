@@ -1,10 +1,8 @@
 import os
-from mmcv.runner import master_only
 
 from .decathlon import preprocess_decathlon
 
 
-@master_only
 def prepare_datasets(cfg, logger):
     logger.info('Preparing dataset {}'.format(cfg.dataset_type))
     if 'TMPDIR' not in os.environ:
