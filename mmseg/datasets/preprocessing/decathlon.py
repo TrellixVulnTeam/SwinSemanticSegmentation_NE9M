@@ -36,15 +36,15 @@ def preprocess_decathlon(cfg, new_dataset_root, logger):
 
     logger.info('Preparing training data')
     multiprocess_data_and_labels(process_volume_and_label, train_data, train_labels, new_img_train_dir, new_label_train_dir,
-                      cfg.ct_window[0], cfg.ct_window[1])
+                      cfg.ct_window[0], cfg.ct_window[1], logger)
 
     logger.info('Preparing validation data')
     multiprocess_data_and_labels(process_volume_and_label, val_data, val_labels, new_img_val_dir, new_label_val_dir,
-                      cfg.ct_window[0], cfg.ct_window[1])
+                      cfg.ct_window[0], cfg.ct_window[1], logger)
     logger.info('Preprocessing of Decathlon data complete')
 
 
-def process_volume_and_label(vol_file, label_file, img_dir, label_dir, ct_min, ct_max):
+def process_volume_and_label(vol_file, label_file, img_dir, label_dir, ct_min, ct_max, logger):
     try:
         vol_data = nib.load(vol_file)
         label_data = nib.load(label_file)
@@ -57,7 +57,7 @@ def process_volume_and_label(vol_file, label_file, img_dir, label_dir, ct_min, c
         for j, (v_slice, l_slice) in enumerate(zip(np_vol, np_label)):
             # Only include slices with labels other than background
             if l_slice.max() > 0:
-                org_name = os.path.split(v)[1][:-7]
+                org_name = os.path.split(vol_file)[1][:-7]
                 slice_name = org_name + '_' + str(j) + '.png'
                 img_out_path = os.path.join(img_dir, slice_name)
                 label_out_path = os.path.join(label_dir, slice_name)
