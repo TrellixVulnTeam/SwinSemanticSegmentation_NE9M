@@ -35,11 +35,11 @@ def preprocess_decathlon(cfg, new_dataset_root, logger):
     os.makedirs(new_label_val_dir, exist_ok=True)
 
     logger.info('Preparing training data')
-    multiprocess_data(process_volume_and_label, train_data, train_labels, new_img_train_dir, new_label_train_dir,
+    multiprocess_data_and_labels(process_volume_and_label, train_data, train_labels, new_img_train_dir, new_label_train_dir,
                       cfg.ct_window[0], cfg.ct_window[1])
 
     logger.info('Preparing validation data')
-    multiprocess_data(process_volume_and_label, val_data, val_labels, new_img_val_dir, new_label_val_dir,
+    multiprocess_data_and_labels(process_volume_and_label, val_data, val_labels, new_img_val_dir, new_label_val_dir,
                       cfg.ct_window[0], cfg.ct_window[1])
     logger.info('Preprocessing of Decathlon data complete')
 
