@@ -14,7 +14,7 @@ train_pipeline = [
     dict(type='LoadAnnotations', reduce_zero_label=True),
     dict(type='Resize', img_scale=(1024, 512), ratio_range=(0.5, 2.0)),
     dict(type='RandomCrop', crop_size=crop_size, cat_max_ratio=0.75),
-    #dict(type='RandomFlip', prob=0.2),
+    dict(type='RandomFlip', prob=0.0),
     #dict(type='RandomRotate', prob=0.1),
     #dict(type='PhotoMetricDistortion'),
     dict(type='Normalize', **img_norm_cfg),
