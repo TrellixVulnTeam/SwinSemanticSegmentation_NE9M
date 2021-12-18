@@ -22,6 +22,14 @@ train_pipeline = [
     dict(type='DefaultFormatBundle'),
     dict(type='Collect', keys=['img', 'gt_semantic_seg']),
 ]
+val_pipeline = [
+    dict(type='LoadImageFromFile', color_type='grayscale'),
+    dict(type='LoadAnnotations', reduce_zero_label=True),
+    dict(type='Resize', img_scale=crop_size),
+    dict(type='Normalize', **img_norm_cfg),
+    dict(type='DefaultFormatBundle'),
+    dict(type='Collect', keys=['img', 'gt_semantic_seg']),
+]
 test_pipeline = [
     dict(type='LoadImageFromFile', color_type='grayscale'),
     dict(
