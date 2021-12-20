@@ -41,6 +41,7 @@ def tensor2imgs(tensor, mean=(0, 0, 0), std=(1, 1, 1), to_rgb=True):
         imgs.append(np.ascontiguousarray(img))
     return imgs
 
+
 def tensor2grayscaleimgs(tensor, mean=(0, 0, 0), std=(1, 1, 1), to_rgb=False):
     """Convert tensor to 1-channel images.
     Args:
@@ -70,6 +71,5 @@ def tensor2grayscaleimgs(tensor, mean=(0, 0, 0), std=(1, 1, 1), to_rgb=False):
         img = tensor[img_id, ...].cpu().numpy()
         img = mmcv.imdenormalize(
             img, mean, std, to_bgr=False).astype(np.uint8)
-        cv2.cvtColor(img, cv2.COLOR_GRAY2BGR, img)
         imgs.append(np.ascontiguousarray(img))
     return imgs

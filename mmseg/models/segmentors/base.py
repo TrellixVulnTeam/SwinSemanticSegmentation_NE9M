@@ -257,6 +257,9 @@ class BaseSegmentor(nn.Module):
         # convert to BGR
         color_seg = color_seg[..., ::-1]
 
+        if len(img.shape) < 3:
+            cv2.cvtColor(img, cv2.COLOR_GRAY2BGR, img)
+
         img = img * 0.5 + color_seg * 0.5
         img = img.astype(np.uint8)
         # if out_file specified, do not show image in window
