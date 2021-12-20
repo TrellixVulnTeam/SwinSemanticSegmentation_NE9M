@@ -13,7 +13,7 @@ class DecathlonLiverDataset(CustomDataset):
     """
     CLASSES = ('liver', 'cancer')
 
-    PALETTE = [[120, 120, 120], [180, 120, 120], [6, 230, 230]]
+    PALETTE = [[120, 120, 120], [6, 230, 230]]
 
     def __init__(self, **kwargs):
         super(DecathlonLiverDataset, self).__init__(
