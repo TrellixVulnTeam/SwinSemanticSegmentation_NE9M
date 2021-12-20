@@ -2,7 +2,7 @@ import nibabel as nib
 import numpy as np
 from PIL import Image
 import os
-from .utils import multiprocess_data_and_labels, split_val_from_train, clip_ct_window
+from .utils import multiprocess_data_and_labels, split_val_from_train, clip_ct_window, multiprocess_data
 
 
 def preprocess_decathlon_train(cfg, new_dataset_root, logger):
@@ -63,7 +63,7 @@ def preprocess_decathlon_test(cfg, new_dataset_root):
     os.makedirs(new_img_test_dir, exist_ok=True)
 
     print('Preparing test data')
-    multiprocess_data(process_volume, volumes, new_img_test_dir, cfg.ct_window[0], cfg.ct_window[1], logger)
+    multiprocess_data(process_volume, volumes, new_img_test_dir, cfg.ct_window[0], cfg.ct_window[1])
 
     print('Preprocessing of Decathlon data complete')
 

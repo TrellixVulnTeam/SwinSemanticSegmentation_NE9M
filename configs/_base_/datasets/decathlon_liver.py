@@ -26,6 +26,7 @@ val_pipeline = [
     dict(type='LoadImageFromFile', color_type='grayscale'),
     dict(type='LoadAnnotations', reduce_zero_label=True),
     dict(type='Resize', img_scale=crop_size),
+    dict(type='RandomFlip', prob=0.0),
     dict(type='Normalize', **img_norm_cfg),
     dict(type='DefaultFormatBundle'),
     dict(type='Collect', keys=['img', 'gt_semantic_seg']),
@@ -33,6 +34,7 @@ val_pipeline = [
 test_pipeline = [
     dict(type='LoadImageFromFile', color_type='grayscale'),
     dict(type='Resize', img_scale=crop_size),
+    dict(type='RandomFlip', prob=0.0),
     dict(type='Normalize', **img_norm_cfg),
     dict(type='ImageToTensor', keys=['img']),
     dict(type='Collect', keys=['img'])

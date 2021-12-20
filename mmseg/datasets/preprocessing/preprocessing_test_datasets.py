@@ -11,7 +11,7 @@ def prepare_test_datasets(cfg):
     else:
         new_dataset_root = os.getenv('TMPDIR')
     if is_master():
-        preprocess_data(cfg, new_dataset_root, logger)
+        preprocess_data(cfg, new_dataset_root)
         dist.barrier()
     else:
         dist.barrier()
@@ -22,4 +22,4 @@ def prepare_test_datasets(cfg):
 
 def preprocess_data(cfg, new_dataset_root):
     if cfg.dataset_base == 'Decathlon':
-        preprocess_decathlon_test(cfg, new_dataset_root, logger)
+        preprocess_decathlon_test(cfg, new_dataset_root)
