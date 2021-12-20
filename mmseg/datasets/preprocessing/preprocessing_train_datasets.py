@@ -1,7 +1,7 @@
 import os
 import torch.distributed as dist
 
-from .decathlon import preprocess_decathlon
+from .decathlon import preprocess_decathlon_train
 from mmseg.utils import is_master
 
 def prepare_train_datasets(cfg, logger):

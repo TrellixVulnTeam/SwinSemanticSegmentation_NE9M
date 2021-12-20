@@ -9,7 +9,7 @@ from mmcv.utils import DictAction
 
 from mmseg.apis import multi_gpu_test, single_gpu_test
 from mmseg.datasets import build_dataloader, build_dataset
-from mmseg.datasets.preprocessing import preprocessing_train_datasets
+from mmseg.datasets.preprocessing import preprocessing_test_datasets
 from mmseg.models import build_segmentor
 
 
@@ -102,7 +102,7 @@ def main():
 
     # build the dataloader
     # TODO: support multiple images per gpu (only minor changes are needed)
-    preprocessing_test_datasets.prepare_test_datasets(cfg, logger)
+    preprocessing_test_datasets.prepare_test_datasets(cfg)
     dataset = build_dataset(cfg.data.test)
     data_loader = build_dataloader(
         dataset,

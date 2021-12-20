@@ -44,7 +44,7 @@ def preprocess_decathlon_train(cfg, new_dataset_root, logger):
     logger.info('Preprocessing of Decathlon data complete')
 
 
-def preprocess_decathlon_test(cfg, new_dataset_root, logger):
+def preprocess_decathlon_test(cfg, new_dataset_root):
     if not 'WORK_ROOT' in os.environ:
         work_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
     else:
@@ -54,18 +54,18 @@ def preprocess_decathlon_test(cfg, new_dataset_root, logger):
     volumes = os.listdir(vol_root)
     volumes = [os.path.join(vol_root, f) for f in volumes]
 
-    logger.info('Found test dataset of size {}'.format(len(volumes)))
+    print('Found test dataset of size {}'.format(len(volumes)))
 
-    logger.info('Creating new directories at new data root{}'.format(new_dataset_root))
+    print('Creating new directories at new data root{}'.format(new_dataset_root))
 
     # Prepare output dirs
     new_img_test_dir = os.path.join(new_dataset_root, 'img_dir', 'test')
     os.makedirs(new_img_test_dir, exist_ok=True)
 
-    logger.info('Preparing test data')
+    print('Preparing test data')
     multiprocess_data(process_volume, volumes, new_img_test_dir, cfg.ct_window[0], cfg.ct_window[1], logger)
 
-    logger.info('Preprocessing of Decathlon data complete')
+    print('Preprocessing of Decathlon data complete')
 
 def process_volume_and_label(vol_file, label_file, img_dir, label_dir, ct_min, ct_max, logger):
     try:
@@ -94,7 +94,7 @@ def process_volume_and_label(vol_file, label_file, img_dir, label_dir, ct_min, c
         logger.error('Failed to processes volume {} and label {} with error {}'.format(v, l, e))
         return 1
 
-def process_volume(vol_file, img_dir, ct_min, ct_max, logger):
+def process_volume(vol_file, img_dir, ct_min, ct_max):
     try:
         vol_data = nib.load(vol_file)
         np_vol = vol_data.get_fdata()
@@ -109,5 +109,5 @@ def process_volume(vol_file, img_dir, ct_min, ct_max, logger):
             pil_img.save(img_out_path)
         return 0
     except Exception as e:
-        logger.error('Failed to processes volume {} with error {}'.format(v, e))
+        print('Failed to processes volume {} with error {}'.format(v, e))
         return 1

@@ -1,11 +1,11 @@
 import os
 import torch.distributed as dist
 
-from .decathlon import preprocess_decathlon
+from .decathlon import preprocess_decathlon_test
 from mmseg.utils import is_master
 
-def prepare_test_datasets(cfg, logger):
-    logger.info('Preparing dataset {}'.format(cfg.dataset_type))
+def prepare_test_datasets(cfg):
+    print('Preparing dataset {}'.format(cfg.dataset_type))
     if 'TMPDIR' not in os.environ:
         new_dataset_root = cfg.tmp_dir
     else:
@@ -20,6 +20,6 @@ def prepare_test_datasets(cfg, logger):
     return cfg
 
 
-def preprocess_data(cfg, new_dataset_root, logger):
+def preprocess_data(cfg, new_dataset_root):
     if cfg.dataset_base == 'Decathlon':
         preprocess_decathlon_test(cfg, new_dataset_root, logger)
