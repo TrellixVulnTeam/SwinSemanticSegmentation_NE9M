@@ -7,7 +7,7 @@ import mmcv
 import numpy as np
 import torch
 import torch.distributed as dist
-from mmcv.image import tensor2imgs
+from mmcv_custom.image.misc import tensor2imgs, tensor2grayscaleimgs
 from mmcv.runner import get_dist_info
 
 
@@ -80,7 +80,10 @@ def single_gpu_test(model,
                 img_metas = img_metas[0]
             except KeyError:
                 pass
-            imgs = tensor2imgs(img_tensor, **img_metas[0]['img_norm_cfg'])
+            if img_tensor.ndim == 4:
+                imgs = tensor2imgs(img_tensor, **img_metas[0]['img_norm_cfg'])
+            else:
+                imgs = tensor2grayscaleimgs(img_tensor, **img_metas[0]['img_norm_cfg'])
             assert len(imgs) == len(img_metas)
 
             for img, img_meta in zip(imgs, img_metas):
