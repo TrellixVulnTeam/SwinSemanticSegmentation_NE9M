@@ -259,7 +259,7 @@ class BaseSegmentor(nn.Module):
         color_seg = color_seg[..., ::-1]
 
         if len(img.shape) < 3:
-            cv2.cvtColor(img, cv2.COLOR_GRAY2BGR, img)
+            img = cv2.cvtColor(img, cv2.COLOR_GRAY2BGR)
 
         img = img * 0.5 + color_seg * 0.5
         img = img.astype(np.uint8)
