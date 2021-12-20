@@ -3,6 +3,7 @@ import warnings
 from abc import ABCMeta, abstractmethod
 from collections import OrderedDict
 
+import cv2
 import mmcv
 import numpy as np
 import torch
