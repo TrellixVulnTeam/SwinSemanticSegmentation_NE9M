@@ -90,7 +90,7 @@ def single_gpu_test(model,
                 h, w = img_meta['img_shape']
                 img_show = img[:h, :w]
 
-                ori_h, ori_w = img_meta['ori_shape'][:-1]
+                ori_h, ori_w = img_meta['ori_shape']
                 img_show = mmcv.imresize(img_show, (ori_w, ori_h))
 
                 if out_dir:
