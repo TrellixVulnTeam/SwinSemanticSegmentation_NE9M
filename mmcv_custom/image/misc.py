@@ -41,7 +41,7 @@ def tensor2imgs(tensor, mean=(0, 0, 0), std=(1, 1, 1), to_rgb=True):
         imgs.append(np.ascontiguousarray(img))
     return imgs
 
-def tensor2grayscaleimgs(tensor, mean=(0, 0, 0), std=(1, 1, 1)):
+def tensor2grayscaleimgs(tensor, mean=(0, 0, 0), std=(1, 1, 1), to_rgb=False):
     """Convert tensor to 1-channel images.
     Args:
         tensor (torch.Tensor): Tensor that contains multiple images, shape (
