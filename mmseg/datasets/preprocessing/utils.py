@@ -12,6 +12,14 @@ def multiprocess_data_and_labels(func, data_list, label_list, *args):
     pool.join()
     return result
 
+def multiprocess_data(func, data_list, *args):
+    nprocs = mp.cpu_count()
+    pool = mp.Pool(processes=nprocs - 1)
+    result = pool.starmap(func, zip(data_list, *[repeat(x) for x in args]))
+    pool.close()
+    pool.join()
+    return result
+
 
 def split_val_from_train(data, labels, seed, ratio=0.20):
     z = list(zip(data, labels))
