@@ -61,7 +61,7 @@ def single_gpu_test(model,
 
         if show or out_dir:
             data_img = data['img']
-            data_img_meta = data['img_meta']
+            data_img_meta = data['img_metas']
 
             try:  # process DataContainer-like objects
                 data_img = data_img.data
