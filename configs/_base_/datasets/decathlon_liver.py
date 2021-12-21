@@ -11,10 +11,10 @@ interpolate_voxel_spacing = False
 voxel_spacing = 1.0
 train_pipeline = [
     dict(type='LoadImageFromFile', color_type='grayscale'),
-    dict(type='LoadAnnotations', reduce_zero_label=True),
+    dict(type='LoadAnnotations', reduce_zero_label=False),
     dict(type='Resize', img_scale=(1024, 512), ratio_range=(0.5, 2.0)),
     dict(type='RandomCrop', crop_size=crop_size, cat_max_ratio=0.75),
-    dict(type='RandomFlip', prob=0.0),
+    dict(type='RandomFlip', prob=0.2),
     #dict(type='RandomRotate', prob=0.1),
     #dict(type='PhotoMetricDistortion'),
     dict(type='Normalize', **img_norm_cfg),
@@ -24,7 +24,7 @@ train_pipeline = [
 ]
 val_pipeline = [
     dict(type='LoadImageFromFile', color_type='grayscale'),
-    dict(type='LoadAnnotations', reduce_zero_label=True),
+    dict(type='LoadAnnotations', reduce_zero_label=False),
     dict(type='Resize', img_scale=crop_size),
     dict(type='RandomFlip', prob=0.0),
     dict(type='Normalize', **img_norm_cfg),

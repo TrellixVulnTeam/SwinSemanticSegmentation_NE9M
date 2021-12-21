@@ -11,13 +11,13 @@ class DecathlonLiverDataset(CustomDataset):
     The ``img_suffix`` is fixed to '.png' and ``seg_map_suffix`` is fixed to
     '.png'.
     """
-    CLASSES = ('liver', 'cancer')
+    CLASSES = ('background', 'liver', 'cancer')
 
-    PALETTE = [[120, 120, 120], [6, 230, 230]]
+    PALETTE = [[100, 200, 100], [20, 230, 230], [200, 50, 50]]
 
     def __init__(self, **kwargs):
         super(DecathlonLiverDataset, self).__init__(
             img_suffix='.png',
             seg_map_suffix='.png',
-            reduce_zero_label=True,
+            reduce_zero_label=False,
             **kwargs)

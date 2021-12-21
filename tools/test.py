@@ -119,6 +119,7 @@ def main():
     timestamp = time.strftime('%Y%m%d_%H%M%S', time.localtime())
     log_file = osp.join(cfg.work_dir, f'{timestamp}.log')
     logger = get_root_logger(log_file=log_file, log_level=cfg.log_level)
+    cfg.seed = None
 
     # build the dataloader
     # TODO: support multiple images per gpu (only minor changes are needed)
