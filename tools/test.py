@@ -1,5 +1,6 @@
 import argparse
 import os
+import os.path as osp
 
 import mmcv
 import torch
@@ -9,8 +10,9 @@ from mmcv.utils import DictAction
 
 from mmseg.apis import multi_gpu_test, single_gpu_test
 from mmseg.datasets import build_dataloader, build_dataset
-from mmseg.datasets.preprocessing import preprocessing_test_datasets
+from mmseg.datasets.preprocessing import preprocessing_train_datasets
 from mmseg.models import build_segmentor
+from mmseg.utils import get_root_logger
 
 
 def parse_args():
@@ -100,10 +102,14 @@ def main():
         distributed = True
         init_dist(args.launcher, **cfg.dist_params)
 
+    timestamp = time.strftime('%Y%m%d_%H%M%S', time.localtime())
+    log_file = osp.join(cfg.work_dir, f'{timestamp}.log')
+    logger = get_root_logger(log_file=log_file, log_level=cfg.log_level)
+
     # build the dataloader
     # TODO: support multiple images per gpu (only minor changes are needed)
-    preprocessing_test_datasets.prepare_test_datasets(cfg)
-    dataset = build_dataset(cfg.data.test)
+    preprocessing_train_datasets.prepare_train_datasets(cfg, logger)
+    dataset = build_dataset(cfg.data.val, dict(test_mode=True))
     data_loader = build_dataloader(
         dataset,
         samples_per_gpu=1,
