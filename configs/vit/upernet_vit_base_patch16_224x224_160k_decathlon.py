@@ -15,12 +15,12 @@ model = dict(
     ),
     decode_head=dict(
         in_channels=[1024, 1024, 1024, 1024],
-        num_classes=2,
+        num_classes=3,
         channels=1024
     ),
     auxiliary_head=dict(
         in_channels=1024,
-        num_classes=2
+        num_classes=3
     ))
 
 # AdamW optimizer, no weight decay for position embedding & layer norm in backbone
