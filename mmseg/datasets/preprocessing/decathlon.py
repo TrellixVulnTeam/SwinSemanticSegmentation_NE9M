@@ -35,12 +35,14 @@ def preprocess_decathlon_train(cfg, new_dataset_root, logger):
     os.makedirs(new_label_val_dir, exist_ok=True)
 
     logger.info('Preparing training data')
+    eval = False
     multiprocess_data_and_labels(process_volume_and_label, train_data, train_labels, new_img_train_dir, new_label_train_dir,
-                      cfg.ct_window[0], cfg.ct_window[1], logger)
+                      cfg.ct_window[0], cfg.ct_window[1], logger, eval)
 
     logger.info('Preparing validation data')
+    eval = True
     multiprocess_data_and_labels(process_volume_and_label, val_data, val_labels, new_img_val_dir, new_label_val_dir,
-                      cfg.ct_window[0], cfg.ct_window[1], logger)
+                      cfg.ct_window[0], cfg.ct_window[1], logger, eval)
     logger.info('Preprocessing of Decathlon data complete')
 
 
@@ -67,7 +69,8 @@ def preprocess_decathlon_test(cfg, new_dataset_root):
 
     print('Preprocessing of Decathlon data complete')
 
-def process_volume_and_label(vol_file, label_file, img_dir, label_dir, ct_min, ct_max, logger):
+
+def process_volume_and_label(vol_file, label_file, img_dir, label_dir, ct_min, ct_max, logger, eval):
     try:
         vol_data = nib.load(vol_file)
         label_data = nib.load(label_file)
@@ -79,7 +82,7 @@ def process_volume_and_label(vol_file, label_file, img_dir, label_dir, ct_min, c
         np_label = np.transpose(np_label, (2, 0, 1)).astype(np.uint8)
         for j, (v_slice, l_slice) in enumerate(zip(np_vol, np_label)):
             # Only include slices with labels other than background
-            if l_slice.max() > 0:
+            if eval:
                 org_name = os.path.split(vol_file)[1][:-7]
                 slice_name = org_name + '_' + str(j) + '.png'
                 img_out_path = os.path.join(img_dir, slice_name)
@@ -89,6 +92,17 @@ def process_volume_and_label(vol_file, label_file, img_dir, label_dir, ct_min, c
                 # pil_ann = pil_ann.convert('P', palette=Image.ADAPTIVE, colors=3)
                 pil_img.save(img_out_path)
                 pil_ann.save(label_out_path)
+            else:
+                if 2 in l_slice:
+                    org_name = os.path.split(vol_file)[1][:-7]
+                    slice_name = org_name + '_' + str(j) + '.png'
+                    img_out_path = os.path.join(img_dir, slice_name)
+                    label_out_path = os.path.join(label_dir, slice_name)
+                    pil_img = Image.fromarray(v_slice)
+                    pil_ann = Image.fromarray(l_slice)
+                    # pil_ann = pil_ann.convert('P', palette=Image.ADAPTIVE, colors=3)
+                    pil_img.save(img_out_path)
+                    pil_ann.save(label_out_path)
         return 0
     except Exception as e:
         logger.error('Failed to processes volume {} and label {} with error {}'.format(v, l, e))
