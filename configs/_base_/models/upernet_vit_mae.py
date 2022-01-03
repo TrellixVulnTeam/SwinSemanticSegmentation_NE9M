@@ -25,7 +25,7 @@ model = dict(
         norm_cfg=norm_cfg,
         align_corners=False,
         loss_decode=dict(
-            type='DiceLoss', exponent=1, loss_weight=1.0)),
+            type='CrossEntropyLoss', class_weight=[1, 20, 100], use_sigmoid=False, loss_weight=1.0)),
     auxiliary_head=dict(
         type='FCNHead',
         in_channels=384,
@@ -38,7 +38,7 @@ model = dict(
         norm_cfg=norm_cfg,
         align_corners=False,
         loss_decode=dict(
-            type='DiceLoss', exponent=1, loss_weight=0.4)),
+            type='CrossEntropyLoss', class_weight=[1, 20, 100], use_sigmoid=False, loss_weight=0.4)),
     # model training and testing settings
     train_cfg=dict(),
     test_cfg=dict(mode='whole'))

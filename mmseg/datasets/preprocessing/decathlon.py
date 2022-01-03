@@ -108,6 +108,7 @@ def process_volume_and_label(vol_file, label_file, img_dir, label_dir, ct_min, c
         logger.error('Failed to processes volume {} and label {} with error {}'.format(v, l, e))
         return 1
 
+
 def process_volume(vol_file, img_dir, ct_min, ct_max):
     try:
         vol_data = nib.load(vol_file)

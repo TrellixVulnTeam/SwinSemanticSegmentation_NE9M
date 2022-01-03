@@ -370,7 +370,9 @@ class CustomDataset(Dataset):
         print_log('Summary:', logger)
         table = AsciiTable(summary_table_data)
         print_log('\n' + table.table, logger=logger)
-
+        for j in range(1, len(class_table_data[0])):
+            eval_results[class_table_data[0]
+                         [j]] = class_table_data[1][j] / 100.0
         for i in range(1, len(summary_table_data[0])):
             eval_results[summary_table_data[0]
                          [i]] = summary_table_data[1][i] / 100.0
