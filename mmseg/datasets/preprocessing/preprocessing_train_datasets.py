@@ -20,9 +20,15 @@ def prepare_train_datasets(cfg, logger):
                 dist.barrier()
         else:
             preprocess_data(cfg, new_dataset_root, logger)
-        cfg.data_root = new_dataset_root
-        cfg.data.train.data_root = new_dataset_root
-        cfg.data.val.data_root = new_dataset_root
+    else:
+        if not 'WORK_ROOT' in os.environ:
+            work_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+        else:
+            work_dir = os.getenv('WORK_ROOT')
+        new_dataset_root = os.path.join(work_dir, cfg.data_root)
+    cfg.data_root = new_dataset_root
+    cfg.data.train.data_root = new_dataset_root
+    cfg.data.val.data_root = new_dataset_root
     return cfg
 
 
