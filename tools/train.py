@@ -82,6 +82,10 @@ def main():
         # use config filename as default work_dir if cfg.work_dir is None
         cfg.work_dir = osp.join('./work_dirs',
                                 osp.splitext(osp.basename(args.config))[0])
+    # Add tmp dir variables to config
+    cfg.use_tmp_dir = args.use_tmp_dir
+    cfg.tmp_dir = args.tmp_dir
+
     if args.load_from is not None:
         cfg.load_from = args.load_from
     if args.resume_from is not None:
