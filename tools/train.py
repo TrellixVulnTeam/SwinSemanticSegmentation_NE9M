@@ -43,6 +43,7 @@ def parse_args():
         help='ids of gpus to use '
         '(only applicable to non-distributed training)')
     parser.add_argument('--seed', type=int, default=None, help='random seed')
+    parser.add_argument('--use_tmp_dir', action='store_true')
     parser.add_argument('--tmp_dir', type=str, default='/scratch/local', help='TMP dir to save preprocessed data to')
     parser.add_argument(
         '--deterministic',
@@ -92,9 +93,9 @@ def main():
 
     # init distributed env first, since logger depends on the dist info.
     if args.launcher == 'none':
-        distributed = False
+        cfg.distributed = False
     else:
-        distributed = True
+        cfg.distributed = True
         init_dist(args.launcher, **cfg.dist_params)
 
     # create work_dir
@@ -118,7 +119,7 @@ def main():
     meta['env_info'] = env_info
 
     # log some basic info
-    logger.info(f'Distributed training: {distributed}')
+    logger.info(f'Distributed training: {cfg.distributed}')
     logger.info(f'Config:\n{cfg.pretty_text}')
 
     # set random seeds
@@ -156,7 +157,7 @@ def main():
         model,
         datasets,
         cfg,
-        distributed=distributed,
+        distributed=cfg.distributed,
         validate=(not args.no_validate),
         timestamp=timestamp,
         meta=meta)
