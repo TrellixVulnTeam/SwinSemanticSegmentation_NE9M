@@ -2,6 +2,9 @@ _base_ = [
     '../_base_/models/upernet_vit_mae.py', '../_base_/datasets/ade20k.py',
     '../_base_/default_runtime.py', '../_base_/schedules/schedule_160k.py'
 ]
+
+crop_size = (512, 512)
+
 model = dict(
     backbone=dict(
         image_size=512,
@@ -37,8 +40,6 @@ lr_config = dict(_delete_=True, policy='poly',
                  warmup_iters=1500,
                  warmup_ratio=1e-6,
                  power=1.0, min_lr=0.0, by_epoch=False)
-
-crop_size = (512, 512)
 
 train_pipeline = [
     dict(type='LoadImageFromFile'),
