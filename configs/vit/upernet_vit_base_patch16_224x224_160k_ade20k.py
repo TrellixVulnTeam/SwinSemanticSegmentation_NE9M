@@ -11,6 +11,7 @@ model = dict(
         patch_size=16,
         channels=3,
         num_classes=1000,
+        use_rel_pos_bias=True,
         mlp_dim=2048
     ),
     decode_head=dict(
@@ -36,4 +37,4 @@ lr_config = dict(_delete_=True, policy='poly',
                  power=1.0, min_lr=0.0, by_epoch=False)
 
 # By default, models are trained on 8 GPUs with 2 images per GPU
-data=dict(samples_per_gpu=8)
+data=dict(samples_per_gpu=2)
