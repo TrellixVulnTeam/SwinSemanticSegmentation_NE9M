@@ -11,6 +11,7 @@ model = dict(
         patch_size=16,
         channels=1,
         num_classes=1000,
+        use_rel_pos_bias=True,
         mlp_dim=2048
     ),
     decode_head=dict(
