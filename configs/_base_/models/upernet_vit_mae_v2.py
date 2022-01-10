@@ -11,7 +11,6 @@ model = dict(
         num_heads=12,
         mlp_ratio=4.,
         qkv_bias=True,
-        norm_layer=partial(nn.LayerNorm, eps=1e-6),
         img_size=224,
         channels=3,
         num_classes=1000,
