@@ -298,8 +298,8 @@ class BEiT(nn.Module):
                  use_abs_pos_emb=True, use_rel_pos_bias=False, use_shared_rel_pos_bias=False,
                  out_indices=[3, 5, 7, 11]):
         super().__init__()
-        #norm_layer = norm_layer or partial(nn.LayerNorm, eps=1e-6)
-        self.norm = norm_layer
+        norm_layer = norm_layer or partial(nn.LayerNorm, eps=1e-6)
+        #self.norm = norm_layer
         self.num_classes = num_classes
         self.num_features = self.embed_dim = embed_dim  # num_features for consistency with other models
 
