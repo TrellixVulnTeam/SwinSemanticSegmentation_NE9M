@@ -7,10 +7,10 @@ crop_size = (512, 512)
 
 model = dict(
     backbone=dict(
-        image_size=512,
-        dim=768,
+        img_size=512,
+        embed_dim=768,
         depth=12,
-        heads=12,
+        num_heads=12,
         patch_size=16,
         in_chans=3,
         num_classes=1000,
