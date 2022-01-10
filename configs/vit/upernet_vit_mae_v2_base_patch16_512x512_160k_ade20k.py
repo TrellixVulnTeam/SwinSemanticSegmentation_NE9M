@@ -15,7 +15,7 @@ model = dict(
         in_chans=3,
         num_classes=1000,
         use_abs_pos_emb=True,
-        use_rel_pos_emb=True
+        use_rel_pos_bias=True
     ),
     decode_head=dict(
         in_channels=[768, 768, 768, 768],
