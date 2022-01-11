@@ -372,6 +372,13 @@ class CustomDataset(Dataset):
         print_log('\n' + table.table, logger=logger)
         print_log('Raw class table: \n', logger)
         print_log(class_table_data, logger=logger)
+
+        for j in range(1, len(class_table_data)):
+            for k in range(1, len(class_table_data[j])):
+                metric_name = class_table_data[j][0] + class_table_data[0][k]
+                metric_val = class_table_data[j][k] / 100.0
+                eval_results[metric_name] = metric_val
+
         for i in range(1, len(summary_table_data[0])):
             eval_results[summary_table_data[0]
                          [i]] = summary_table_data[1][i] / 100.0
