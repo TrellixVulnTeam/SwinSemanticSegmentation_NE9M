@@ -49,6 +49,8 @@ def parse_args():
         '--deterministic',
         action='store_true',
         help='whether to set deterministic options for CUDNN backend.')
+    parser.add_argument('--neptune_logging', action='store_true', help='Wether to use online logging with neptune')
+
     parser.add_argument(
         '--options', nargs='+', action=DictAction, help='custom options')
     parser.add_argument(
@@ -85,6 +87,9 @@ def main():
     # Add tmp dir variables to config
     cfg.use_tmp_dir = args.use_tmp_dir
     cfg.tmp_dir = args.tmp_dir
+
+    # Add neptune logging variable to config
+    cfg.neptune_logging = args.neptune_logging
 
     if args.load_from is not None:
         cfg.load_from = args.load_from
