@@ -11,8 +11,9 @@ from .swin_transformer import SwinTransformer
 from .vit_mae import ViTMAE
 from .beit import BEiT
 from .vit_esvit import EsViT
+from .vit_mae_v2 import ViTMAEv2
 
 __all__ = [
     'ResNet', 'ResNetV1c', 'ResNetV1d', 'ResNeXt', 'HRNet', 'FastSCNN', 'EsViT',
-    'ResNeSt', 'MobileNetV2', 'UNet', 'CGNet', 'MobileNetV3', 'SwinTransformer', 'ViTMAE', 'BEiT'
+    'ResNeSt', 'MobileNetV2', 'UNet', 'CGNet', 'MobileNetV3', 'SwinTransformer', 'ViTMAE', 'BEiT', 'ViTMAEv2'
 ]
