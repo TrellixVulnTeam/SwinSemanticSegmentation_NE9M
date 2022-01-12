@@ -87,6 +87,11 @@ def train_segmentor(model,
             logger=logger,
             meta=meta))
 
+
+    # Fix for NeptuneCustomLoggerHook so that config parameters gets logged.
+    for hook in cfg.log_config['hooks']:
+        if hook['type'] == 'NeptuneCustomLoggerHook':
+            hook['cfg_as_dict'] = cfg._cfg_dict.to_dict()
     # register hooks
     runner.register_training_hooks(cfg.lr_config, cfg.optimizer_config,
                                    cfg.checkpoint_config, cfg.log_config,
