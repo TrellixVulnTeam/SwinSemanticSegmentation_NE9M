@@ -51,7 +51,7 @@ img_norm_cfg = dict(
 crop_size = (512, 512)
 
 train_pipeline = [
-    dict(type='LoadImageFromFile'),
+    dict(type='LoadImageFromFile', color_type='grayscale'),
     dict(type='LoadAnnotations', reduce_zero_label=False),
     dict(type='Resize', img_scale=(2048, 512), ratio_range=(0.5, 2.0)),
     dict(type='RandomCrop', crop_size=crop_size, cat_max_ratio=0.75),
@@ -64,7 +64,7 @@ train_pipeline = [
 ]
 
 test_pipeline = [
-    dict(type='LoadImageFromFile'),
+    dict(type='LoadImageFromFile', color_type='grayscale'),
     dict(
         type='MultiScaleFlipAug',
         img_scale=(2048, 512),
