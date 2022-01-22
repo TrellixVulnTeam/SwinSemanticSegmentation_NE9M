@@ -10,6 +10,7 @@ model = dict(
         num_heads=16,
         patch_size=16,
         in_chans=1,
+        out_indices=[7, 11, 15, 23],
         num_classes=1000,
         use_abs_pos_emb=True,
         use_rel_pos_bias=True
