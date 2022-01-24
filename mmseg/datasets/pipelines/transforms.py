@@ -1062,9 +1062,9 @@ class PhotoMetricDistortion(object):
                 alpha=random.uniform(self.contrast_lower, self.contrast_upper))
         return img
 
-    def saturation(self, img):
+    def saturation(self, img, color_prob):
         """Saturation distortion."""
-        if random.randint(2):
+        if random.randint(color_prob):
             img = mmcv.bgr2hsv(img)
             img[:, :, 1] = self.convert(
                 img[:, :, 1],
@@ -1073,9 +1073,9 @@ class PhotoMetricDistortion(object):
             img = mmcv.hsv2bgr(img)
         return img
 
-    def hue(self, img):
+    def hue(self, img, color_prob):
         """Hue distortion."""
-        if random.randint(2):
+        if random.randint(color_prob):
             img = mmcv.bgr2hsv(img)
             img[:, :,
                 0] = (img[:, :, 0].astype(int) +
@@ -1094,6 +1094,7 @@ class PhotoMetricDistortion(object):
         """
 
         img = results['img']
+        color_prob = 1 if len(results['img_shape']) < 3 else 2 # np.random.randint(1) = 0, np.random.randint(2) = [0,1]
         # random brightness
         img = self.brightness(img)
 
@@ -1104,10 +1105,10 @@ class PhotoMetricDistortion(object):
             img = self.contrast(img)
 
         # random saturation
-        img = self.saturation(img)
+        img = self.saturation(img, color_prob)
 
         # random hue
-        img = self.hue(img)
+        img = self.hue(img, color_prob)
 
         # random contrast
         if mode == 0:
