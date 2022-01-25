@@ -77,7 +77,7 @@ def process_volume_and_label(vol_file, label_file, img_dir, label_dir, ct_min, c
         np_vol = vol_data.get_fdata()
         np_label = label_data.get_fdata()
         assert np_vol.shape == np_label.shape
-        np_vol = clip_ct_window(np_vol, ct_min, ct_max)
+        np_vol = clip_ct_window_cube_root(np_vol, ct_min, ct_max)
         np_vol = np.transpose(np_vol, (2, 0, 1)).astype(np.uint8)
         np_label = np.transpose(np_label, (2, 0, 1)).astype(np.uint8)
         for j, (v_slice, l_slice) in enumerate(zip(np_vol, np_label)):
@@ -113,7 +113,7 @@ def process_volume(vol_file, img_dir, ct_min, ct_max):
     try:
         vol_data = nib.load(vol_file)
         np_vol = vol_data.get_fdata()
-        np_vol = clip_ct_window(np_vol, ct_min, ct_max)
+        np_vol = clip_ct_window_cube_root(np_vol, ct_min, ct_max)
         np_vol = np.transpose(np_vol, (2, 0, 1)).astype(np.uint8)
         for j, v_slice in enumerate(np_vol):
             org_name = os.path.split(vol_file)[1][:-7]

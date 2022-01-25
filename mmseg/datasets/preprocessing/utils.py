@@ -44,3 +44,11 @@ def split_val_from_train(data, labels, seed, ratio=0.20):
 def clip_ct_window(np_arr, ct_min, ct_max):
     np_arr = np.minimum(255, np.maximum(0, (np_arr - ct_min) / (ct_max - ct_min) * 255))
     return np_arr
+
+def clip_ct_window_cube_root(np_arr, ct_min, ct_max):
+    np_arr = np.clip(np_arr, ct_min, ct_max)
+    np_arr = np.cbrt(np_arr)
+    np_min = np.cbrt(ct_min)
+    np_max = np.cbrt(ct_max)
+    np_arr = np.minimum(255, np.maximum(0, (np_arr - np_min) / (np_max - np_min) * 255))
+    return np_arr.astype(np.uint8)
