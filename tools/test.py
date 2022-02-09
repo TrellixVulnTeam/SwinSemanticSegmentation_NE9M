@@ -44,6 +44,9 @@ def parse_args():
         '--gpu-collect',
         action='store_true',
         help='whether to use gpu to collect results.')
+    parser.add_argument('--seed', type=int, default=None, help='random seed')
+    parser.add_argument('--use_tmp_dir', action='store_true')
+    parser.add_argument('--tmp_dir', type=str, default='/scratch/local', help='TMP dir to save preprocessed data to')
     parser.add_argument(
         '--tmpdir',
         help='tmp directory used for collecting results from multiple '
@@ -108,6 +111,10 @@ def main():
         cfg.data.test.pipeline[1].flip = True
     cfg.model.pretrained = None
     cfg.data.test.test_mode = True
+    # Add tmp dir variables to config
+    cfg.use_tmp_dir = args.use_tmp_dir
+    cfg.tmp_dir = args.tmp_dir
+    cfg.seed = args.seed
 
     # init distributed env first, since logger depends on the dist info.
     if args.launcher == 'none':
