@@ -131,7 +131,7 @@ def main():
 
     # build the dataloader
     # TODO: support multiple images per gpu (only minor changes are needed)
-    preprocessing_train_datasets.prepare_train_datasets(cfg, logger)
+    preprocessing_train_datasets.prepare_train_datasets(cfg, logger, ratio=0.01)
     dataset = build_dataset(cfg.data.val, dict(test_mode=True))
     data_loader = build_dataloader(
         dataset,

@@ -5,7 +5,7 @@ import os
 from .utils import multiprocess_data_and_labels, split_val_from_train, clip_ct_window, multiprocess_data, clip_ct_window_cube_root
 
 
-def preprocess_decathlon_train(cfg, new_dataset_root, logger):
+def preprocess_decathlon_train(cfg, new_dataset_root, logger, ratio=0.2):
     if not 'WORK_ROOT' in os.environ:
         work_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
     else:
@@ -19,7 +19,7 @@ def preprocess_decathlon_train(cfg, new_dataset_root, logger):
     labels = [os.path.join(label_root, f) for f in labels]
     assert len(volumes) == len(labels)
 
-    train_data, train_labels, val_data, val_labels = split_val_from_train(volumes, labels, cfg.seed)
+    train_data, train_labels, val_data, val_labels = split_val_from_train(volumes, labels, cfg.seed, ratio=ratio)
     logger.info('Split dataset of size {} into train: {} and val: {}'.format(len(volumes), len(train_data), len(val_data)))
 
     logger.info('Creating new directories at new data root{}'.format(new_dataset_root))
@@ -103,9 +103,10 @@ def process_volume_and_label(vol_file, label_file, img_dir, label_dir, ct_min, c
                     # pil_ann = pil_ann.convert('P', palette=Image.ADAPTIVE, colors=3)
                     pil_img.save(img_out_path)
                     pil_ann.save(label_out_path)
+        logger.info('Successfully processed volume {} and label {} without errors'.format(vol_file, label_file))
         return 0
     except Exception as e:
-        logger.error('Failed to processes volume {} and label {} with error {}'.format(v, l, e))
+        logger.error('Failed to processes volume {} and label {} with error {}'.format(vol_file, label_file, e))
         return 1
 
 
@@ -124,5 +125,5 @@ def process_volume(vol_file, img_dir, ct_min, ct_max):
             pil_img.save(img_out_path)
         return 0
     except Exception as e:
-        print('Failed to processes volume {} with error {}'.format(v, e))
+        print('Failed to processes volume {} with error {}'.format(vol_file, e))
         return 1
