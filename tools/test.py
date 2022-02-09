@@ -122,6 +122,7 @@ def main():
     else:
         distributed = True
         init_dist(args.launcher, **cfg.dist_params)
+    cfg.distributed = distributed
 
     timestamp = time.strftime('%Y%m%d_%H%M%S', time.localtime())
     log_file = osp.join(cfg.work_dir, f'{timestamp}.log')
