@@ -38,6 +38,7 @@ val_pipeline = [
 '''
 test_pipeline = [
     dict(type='LoadImageFromFile', color_type='grayscale'),
+    dict(type='RescaleIntensity', scale_min=0, scale_max=1),
     dict(type='Resize', img_scale=crop_size),
     dict(type='RandomFlip', prob=0.0),
     dict(type='Normalize', **img_norm_cfg),
