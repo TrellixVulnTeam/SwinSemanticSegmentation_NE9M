@@ -598,6 +598,53 @@ class Pad(object):
 
 
 @PIPELINES.register_module()
+class RescaleIntensity(object):
+    """Rescale intensity values to a set min and max.
+
+    Added key is "img_rescale_intensity".
+
+    Args:
+        img_min (int): New minimum intensity value
+        std (int): New maximum intensity value
+    """
+
+    def __init__(self, scale_min=0, scale_max=1):
+        self.scale_min = scale_min
+        self.scale_max = scale_max
+        self.scale_range = scale_max - scale_min
+
+    def __call__(self, results):
+        """Call function to rescale intensity of images.
+
+        Args:
+            results (dict): Result dict from loading pipeline.
+
+        Returns:
+            dict: Recaled results, "img_rescale_intensity" key is added into
+                result dict.
+        """
+        img = results['img'].copy().astype(np.float32)
+        assert img.dtype != np.uint8
+        img_max = img.max()
+        img_min = img.min()
+        range = img_max - img_min
+        divisor = range / self.scale_range
+        divinv = 1 / np.float64(divisor)
+        cv2.multiply(img, divinv, img)
+        cv2.add(img, self.scale_min, img)
+
+        results['img'] = img
+
+        results['img_rescale_intensity'] = dict(
+            scale_min=self.scale_min, scale_max=self.scale_max)
+        return results
+
+    def __repr__(self):
+        repr_str = self.__class__.__name__
+        repr_str += f'(scale_min={self.scale_min}, scale_max={self.scale_max})'
+        return repr_str
+
+@PIPELINES.register_module()
 class Normalize(object):
     """Normalize the image.
 

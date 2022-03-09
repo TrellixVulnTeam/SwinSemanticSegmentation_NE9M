@@ -2,16 +2,19 @@
 dataset_base = 'Decathlon'
 dataset_type = 'DecathlonLiverDataset'
 data_root = 'data/Decathlon/3D/Task03_Liver'
+decathlon_liver_mean = 0.1943
+decathlon_livear_std = 0.2786
 img_norm_cfg = dict(
-    mean=[0], std=[255], to_rgb=False)
+    mean=[decathlon_liver_mean], std=[decathlon_livear_std], to_rgb=False)
 crop_size = (224, 224)
 pp_ct_window = True
-ct_window = [-21, 189]
+ct_window = [-1000, 1000]
 interpolate_voxel_spacing = False
 voxel_spacing = 1.0
 train_pipeline = [
     dict(type='LoadImageFromFile', color_type='grayscale'),
     dict(type='LoadAnnotations', reduce_zero_label=False),
+    dict(type='RescaleIntensity', scale_min=0, scale_max=1),
     dict(type='Resize', img_scale=(1024, 512), ratio_range=(0.5, 2.0)),
     dict(type='RandomCrop', crop_size=crop_size, cat_max_ratio=0.75),
     dict(type='RandomFlip', prob=0.5),
