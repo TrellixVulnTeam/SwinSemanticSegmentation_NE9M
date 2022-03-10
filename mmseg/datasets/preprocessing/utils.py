@@ -8,8 +8,9 @@ def multiprocess_data_and_labels(func, data_list, label_list, *args):
     nprocs = mp.cpu_count()
     logger = args[4]
     logger.info('Number of processes found: {}'.format(nprocs))
-    pool = mp.Pool(processes=nprocs - 1)
-    logger.info('Created multiprocessing pool')
+    nprocs = min(nprocs, 10)
+    pool = mp.Pool(processes=nprocs)
+    logger.info('Created multiprocessing pool with {} processes'.format(nprocs))
     result = pool.starmap(func, zip(data_list, label_list, *[repeat(x) for x in args]))
     pool.close()
     pool.join()
