@@ -67,6 +67,9 @@ class NeptuneCustomLoggerHook(LoggerHook):
             assert isinstance(self.cfg_as_dict, dict)
             self.run['parameters'] = self.cfg_as_dict
 
+            tags = self.generate_tags()
+            neptune_logger['sys/tags'].add(tags)
+
     @master_only
     def log(self, runner):
         tags = self.get_loggable_tags(runner)
@@ -82,3 +85,23 @@ class NeptuneCustomLoggerHook(LoggerHook):
     @master_only
     def after_run(self, runner):
         self.run.stop()
+
+    def generate_tags(self):
+        tags = []
+        if self.cfg_as_dict is not None:
+            assert isinstance(self.cfg_as_dict, dict)
+            tags = ['Finetuning', 'SemSeg']
+            tags.append(self.cfg_as_dict['dataset_base'])
+            dataset_type = self.cfg_as_dict['dataset_type']
+            if dataset_type[9:14] == 'Liver':
+                tags.append('Liver')
+            model_bb = self.cfg_as_dict['model']['backbone']['type']
+            if model_bb[0:3] == 'ViT':
+                tags.append('ViT')
+            if model_bb[3:6] == 'MAE':
+                tags.append('MAE')
+            if model_bb[6:8] == 'v2':
+                tags.append('Official')
+            tags.append(self.cfg_as_dict['model']['decode_head']['type'])
+            tags.append(self.cfg_as_dict['model']['decode_head']['loss_decode']['type'])
+        return tags
