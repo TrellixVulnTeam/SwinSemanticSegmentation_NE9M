@@ -68,7 +68,7 @@ class NeptuneCustomLoggerHook(LoggerHook):
             self.run['parameters'] = self.cfg_as_dict
 
             tags = self.generate_tags()
-            neptune_logger['sys/tags'].add(tags)
+            self.run['sys/tags'].add(tags)
 
     @master_only
     def log(self, runner):
