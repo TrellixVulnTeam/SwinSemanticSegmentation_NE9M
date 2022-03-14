@@ -3,9 +3,9 @@ dataset_base = 'Decathlon'
 dataset_type = 'DecathlonLiverDataset'
 data_root = 'data/Decathlon/3D/Task03_Liver'
 decathlon_liver_mean = 0.1943
-decathlon_livear_std = 0.2786
+decathlon_liver_std = 0.2786
 img_norm_cfg = dict(
-    mean=[decathlon_liver_mean], std=[decathlon_livear_std], to_rgb=False)
+    mean=[decathlon_liver_mean], std=[decathlon_liver_std], to_rgb=False)
 crop_size = (224, 224)
 pp_ct_window = True
 ct_window = [-1000, 1000]
