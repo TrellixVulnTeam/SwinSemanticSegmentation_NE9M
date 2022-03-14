@@ -72,12 +72,16 @@ def preprocess_decathlon_test(cfg, new_dataset_root):
 
 def process_volume_and_label(vol_file, label_file, img_dir, label_dir, ct_min, ct_max, logger, eval):
     try:
+        logger.debug('Starting preprocessing of files {} and {}'.format(vol_file, label_file))
         vol_data = nib.load(vol_file)
         label_data = nib.load(label_file)
+        logger.debug('Created file objects')
         np_vol = vol_data.get_fdata()
         np_label = label_data.get_fdata()
+        logger.debug('Loaded image data into memory')
         assert np_vol.shape == np_label.shape
         np_vol = clip_ct_window_cube_root(np_vol, ct_min, ct_max)
+        logger.debug('Clipped cube root')
         np_vol = np.transpose(np_vol, (2, 0, 1)).astype(np.uint8)
         np_label = np.transpose(np_label, (2, 0, 1)).astype(np.uint8)
         for j, (v_slice, l_slice) in enumerate(zip(np_vol, np_label)):
@@ -98,12 +102,15 @@ def process_volume_and_label(vol_file, label_file, img_dir, label_dir, ct_min, c
                     slice_name = org_name + '_' + str(j) + '.png'
                     img_out_path = os.path.join(img_dir, slice_name)
                     label_out_path = os.path.join(label_dir, slice_name)
+                    logger.debug('Saving slice {} as {}'.format(j, img_out_path))
                     pil_img = Image.fromarray(v_slice)
                     pil_ann = Image.fromarray(l_slice)
                     # pil_ann = pil_ann.convert('P', palette=Image.ADAPTIVE, colors=3)
                     pil_img.save(img_out_path)
                     pil_ann.save(label_out_path)
-        logger.info('Successfully processed volume {} and label {} without errors'.format(vol_file, label_file))
+                else:
+                    logger.debug('Skipped slice {}'.format(j))
+        logger.debug('Successfully processed volume {} and label {} without errors'.format(vol_file, label_file))
         return 0
     except Exception as e:
         logger.error('Failed to processes volume {} and label {} with error {}'.format(vol_file, label_file, e))
