@@ -14,12 +14,12 @@ voxel_spacing = 1.0
 train_pipeline = [
     dict(type='LoadImageFromFile', color_type='grayscale'),
     dict(type='LoadAnnotations', reduce_zero_label=False),
-    dict(type='RescaleIntensity', scale_min=0, scale_max=1),
     dict(type='Resize', img_scale=(1024, 512), ratio_range=(0.5, 2.0)),
     dict(type='RandomCrop', crop_size=crop_size, cat_max_ratio=0.75),
     dict(type='RandomFlip', prob=0.5),
     dict(type='RandomRotate', prob=0.25, degree=36),
     dict(type='PhotoMetricDistortion'),
+    dict(type='RescaleIntensity', scale_min=0, scale_max=1),
     dict(type='Normalize', **img_norm_cfg),
     #dict(type='Pad', size=crop_size, pad_val=0, seg_pad_val=255),
     dict(type='DefaultFormatBundle'),
@@ -38,9 +38,9 @@ val_pipeline = [
 '''
 test_pipeline = [
     dict(type='LoadImageFromFile', color_type='grayscale'),
-    dict(type='RescaleIntensity', scale_min=0, scale_max=1),
     dict(type='Resize', img_scale=crop_size),
     dict(type='RandomFlip', prob=0.0),
+    dict(type='RescaleIntensity', scale_min=0, scale_max=1),
     dict(type='Normalize', **img_norm_cfg),
     dict(type='ImageToTensor', keys=['img']),
     dict(type='Collect', keys=['img'])
