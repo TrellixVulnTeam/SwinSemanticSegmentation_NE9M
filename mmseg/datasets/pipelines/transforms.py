@@ -613,6 +613,12 @@ class RescaleIntensity(object):
         self.scale_min = scale_min
         self.scale_max = scale_max
         self.scale_range = scale_max - scale_min
+        self.img_min = 0.0
+        self.img_max = 255.0
+        self.img_range = self.img_max - self.img_min
+        self.divisor = self.img_range / self.scale_range
+        self.divinv = 1 / np.float64(self.divisor)
+
 
     def __call__(self, results):
         """Call function to rescale intensity of images.
@@ -626,12 +632,7 @@ class RescaleIntensity(object):
         """
         img = results['img'].copy().astype(np.float32)
         assert img.dtype != np.uint8
-        img_max = img.max()
-        img_min = img.min()
-        range = img_max - img_min
-        divisor = range / self.scale_range
-        divinv = 1 / np.float64(divisor)
-        cv2.multiply(img, divinv, img)
+        cv2.multiply(img, self.divinv, img)
         cv2.add(img, self.scale_min, img)
 
         results['img'] = img
